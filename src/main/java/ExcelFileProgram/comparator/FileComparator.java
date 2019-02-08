@@ -13,6 +13,8 @@ public class FileComparator {
     private int helpfulCellNumber1;
     private int helpfulCellNumber2;
     private int titleRowNumber = 0;
+    private String[] titleLineParts;
+    private List<String> itemsByMainCell;
 
     private List<String> baseList;
     private List<String> toCompareList;
@@ -26,17 +28,41 @@ public class FileComparator {
         this.toCompareList = toCompareList;
     }
 
-    public void setMainCellNumberByCellName() {
-        splitLineBySemicolon();
+    public int getMainCellNumber() {
+        return mainCellNumber;
+    }
+
+    public void selectMainCellNumberByCellName() {
+        titleLineParts = splitLineBySemicolon();
+        mainCellNumber = getCellNumber();
     }
 
     private String[] splitLineBySemicolon() {
-        String[] parts = baseList.get(titleRowNumber).split(";");
-        return parts;
+        return baseList.get(titleRowNumber).split(";");
     }
 
     private String[] splitLineBySemicolon(String line) {
-        String[] parts = line.split(";");
-        return parts;
+        return line.split(";");
+    }
+
+    private int getCellNumber() {
+        int i = 0;
+        for (String item : titleLineParts) {
+            if (item.contains(mainCellName)) {
+                break;
+            } else {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    public void getItemsByMainCell() {
+        itemsByMainCell = new LinkedList<>();
+        for (String item : baseList) {
+            String[] splittedLine = splitLineBySemicolon(item);
+            itemsByMainCell.add(splittedLine[mainCellNumber]);
+        }
+        System.out.println(Arrays.asList(itemsByMainCell));
     }
 }

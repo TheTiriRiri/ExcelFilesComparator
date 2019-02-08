@@ -10,7 +10,8 @@ public class FileComparatorController {
         this.fileComparator = new FileComparator(baseExcelFileImpl.getList(), toCompareExcelFileImpl.getList());
     }
 
-    public void prepareListAssupmtions() {
-        fileComparator.setMainCellNumberByCellName();
+    public void prepareListAssumptions() {
+        fileComparator.selectMainCellNumberByCellName();
+        fileComparator.getItemsByMainCell();
     }
 }

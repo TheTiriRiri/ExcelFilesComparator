@@ -79,6 +79,6 @@ public class MainController {
         fileComparatorController = new FileComparatorController(
                 baseExcelFileControllerImpl.getExcelFileImpl(),
                 toCompareExcelFileControllerImpl.getExcelFileImpl());
-        fileComparatorController.prepareListAssupmtions();
+        fileComparatorController.prepareListAssumptions();
     }
 }
