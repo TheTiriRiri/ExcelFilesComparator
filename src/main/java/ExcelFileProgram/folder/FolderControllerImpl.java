@@ -34,6 +34,7 @@ public class FolderControllerImpl implements FolderController {
                     .collect(Collectors.toList());
 
         } catch (IOException e) {
+            System.out.println( "NO FILES IN FOLDER" );
             e.printStackTrace();
         }
     }

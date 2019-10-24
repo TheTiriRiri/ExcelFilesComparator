@@ -11,8 +11,11 @@ import java.io.File;
 
 public class MainController {
 
-    private static String firstFileDirectory = "/home/konradk/Documents/KonradSoftware/6666/v0011/";
-    private static String secondFileDirectory = "/home/konradk/Documents/KonradSoftware/6666/v0021/";
+// linux path    private static String firstFileDirectory = "/home/konradk/Documents/KonradSoftware/6666/v0011/";
+// linux path    private static String secondFileDirectory = "/home/konradk/Documents/KonradSoftware/6666/v0021/";
+
+    private static String firstFileDirectory = "C:\\excelComp\\old";    // windows path
+    private static String secondFileDirectory = "C:\\excelComp\\new";   // windows path
 
     private FolderController firstFileFolderController;
     private FolderController secondFileFolderController;

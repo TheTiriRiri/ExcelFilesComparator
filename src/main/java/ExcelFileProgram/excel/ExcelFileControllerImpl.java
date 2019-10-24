@@ -32,11 +32,3 @@ public class ExcelFileControllerImpl {
     }
 
 }
-/**
- * for (int k = 0; k < 25; k++) {
- * for (int h = 0; h < 7; h++) {
- * System.out.print(tab[k][h] + "; ");
- * }
- * System.out.println();
- * }
- **/
