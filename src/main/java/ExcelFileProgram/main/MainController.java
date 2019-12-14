@@ -17,19 +17,19 @@ public class MainController {
     private static String firstFileDirectory = "C:\\excelComp\\old";    // windows path
     private static String secondFileDirectory = "C:\\excelComp\\new";   // windows path
 
-    private FolderController firstFileFolderController;
-    private FolderController secondFileFolderController;
-    private BaseFileQueueControllerImpl baseFileQueueControllerImpl;
-    private FileToCompareListControllerImpl fileToCompareListControllerImpl;
-    private ExcelFileControllerImpl baseExcelFileControllerImpl;
-    private ExcelFileControllerImpl toCompareExcelFileControllerImpl;
+    private FolderController serverOneFolderController;
+    private FolderController serverTwoFolderController;
+    private BaseFileQueueControllerImpl serverOneQueueControllerImpl;
+    private FileToCompareListControllerImpl serverTwoListControllerImpl;
+    private ExcelFileControllerImpl serverOneFileControllerImpl;
+    private ExcelFileControllerImpl serverTwoFileControllerImpl;
     private FileComparatorController fileComparatorController;
-    private File fileFromQueue;
-    private File fileToCompare;
+    private File serverOneFile;
+    private File serverTwoFile;
 
     public MainController() {
-        firstFileFolderController = new FolderControllerImpl(firstFileDirectory);
-        secondFileFolderController = new FolderControllerImpl(secondFileDirectory);
+        serverOneFolderController = new FolderControllerImpl(firstFileDirectory);
+        serverTwoFolderController = new FolderControllerImpl(secondFileDirectory);
     }
 
     public void run() throws Exception {
@@ -40,48 +40,49 @@ public class MainController {
         while (nextToCompareIsOk()) {
             setFilesToComparison();
             convertFilesToListStructure();
-            compareConvertedLists();
+//            compareConvertedLists();
 
 
             ////////////////
-            baseFileQueueControllerImpl.setNext();
+            serverOneQueueControllerImpl.setNext();
             System.out.println("**********************");
         }
     }
 
     private void collectFilesInBothFolders() {
-        firstFileFolderController.collectFilesInFolder();
-        secondFileFolderController.collectFilesInFolder();
+        serverOneFolderController.collectFilesInFolder();
+        serverTwoFolderController.collectFilesInFolder();
     }
 
     private void initializeQueueFiles() {
-        baseFileQueueControllerImpl = new BaseFileQueueControllerImpl(firstFileFolderController.getFilesInFolder());
+        serverOneQueueControllerImpl = new BaseFileQueueControllerImpl(serverOneFolderController.getFilesInFolder());
     }
 
     private void initializeListFilesToCompare() {
-        fileToCompareListControllerImpl = new FileToCompareListControllerImpl(secondFileFolderController.getFilesInFolder());
+        serverTwoListControllerImpl = new FileToCompareListControllerImpl(serverTwoFolderController.getFilesInFolder());
     }
 
     private Boolean nextToCompareIsOk() {
-        return baseFileQueueControllerImpl.queueNotEmpty() && fileToCompareListControllerImpl.ListNotEmpty();
+        return serverOneQueueControllerImpl.queueNotEmpty() && serverTwoListControllerImpl.ListNotEmpty();
     }
 
     private void setFilesToComparison() throws Exception {
-        fileFromQueue = baseFileQueueControllerImpl.getFileToPerform();
-        fileToCompare = fileToCompareListControllerImpl.getFileToCompare(baseFileQueueControllerImpl.getNameFileToPerform());
+        serverOneFile = serverOneQueueControllerImpl.getFileToPerform();
+        serverTwoFile = serverTwoListControllerImpl.getFileToCompare(serverOneQueueControllerImpl.getNameFileToPerform());
     }
 
     private void convertFilesToListStructure() {
-        baseExcelFileControllerImpl = new ExcelFileControllerImpl(fileFromQueue);
-        baseExcelFileControllerImpl.createDataList();
-        toCompareExcelFileControllerImpl = new ExcelFileControllerImpl(fileToCompare);
-        toCompareExcelFileControllerImpl.createDataList();
+        serverOneFileControllerImpl = new ExcelFileControllerImpl(serverOneFile);
+        serverTwoFileControllerImpl = new ExcelFileControllerImpl(serverTwoFile);
+        serverOneFileControllerImpl.createDataList();
+
+        serverTwoFileControllerImpl.createDataList();
     }
 
     private void compareConvertedLists() {
         fileComparatorController = new FileComparatorController(
-                baseExcelFileControllerImpl.getExcelFileImpl(),
-                toCompareExcelFileControllerImpl.getExcelFileImpl());
+                serverOneFileControllerImpl.getExcelFileImpl(),
+                serverTwoFileControllerImpl.getExcelFileImpl());
         fileComparatorController.prepareListAssumptions();
     }
 }
